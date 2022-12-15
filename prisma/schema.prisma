@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model categories {
+  category_id Int     @id @default(autoincrement())
+  name        String  @db.VarChar
+  funds       funds[]
+}
+
+model funds {
+  isin_code     String         @id @db.VarChar
+  mc_code       String         @db.VarChar
+  name          String         @db.VarChar
+  managed_by    Int
+  legal_type    Int?
+  category      Int?
+  periodicity   Int?
+  categories    categories?    @relation(fields: [category], references: [category_id], onDelete: NoAction, onUpdate: NoAction, map: "Category constraint")
+  legal_types   legal_types?   @relation(fields: [legal_type], references: [legal_type_id], onDelete: NoAction, onUpdate: NoAction, map: "Legal type constraint")
+  managers      managers       @relation(fields: [managed_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Manager constraint")
+  periodicities periodicities? @relation(fields: [periodicity], references: [periodicity_id], onDelete: NoAction, onUpdate: NoAction, map: "Periodicity constraint")
+  performances  performances[]
+  rates         rates?
+}
+
+model legal_types {
+  legal_type_id Int     @id @default(autoincrement())
+  name          String  @db.VarChar
+  funds         funds[]
+}
+
+model performances {
+  performance_id Int      @id @default(autoincrement())
+  isin_code      String   @db.VarChar
+  date           DateTime @db.Date
+  an_value       Decimal? @db.Decimal
+  vl_value       Decimal? @db.Decimal
+  funds          funds    @relation(fields: [isin_code], references: [isin_code], onDelete: NoAction, onUpdate: NoAction, map: "ISIN constraint")
+}
+
+model periodicities {
+  periodicity_id Int     @id @default(autoincrement())
+  name           String  @db.VarChar
+  funds          funds[]
+}
+
+model rates {
+  rate_id          Int     @id @default(autoincrement())
+  isin_code        String  @unique @db.VarChar
+  subscription_fee Decimal @db.Decimal
+  redemption_fee   Decimal @db.Decimal
+  mgt_fee          Decimal @db.Decimal
+  funds            funds   @relation(fields: [isin_code], references: [isin_code], onDelete: NoAction, onUpdate: NoAction, map: "isin")
+}
+
+model managers {
+  id           Int     @id @default(autoincrement())
+  manager_name String  @unique(map: "Unique name") @db.VarChar
+  website_url  String? @db.VarChar
+  logo_url     String? @db.VarChar
+  funds        funds[]
+}

@@ -12,6 +12,7 @@ const defaultFundSelect = Prisma.validator<Prisma.fundsSelect>()({
 });
 
 const fundsRouter = router({
+    /* Finding funds matching keystrokes by user */
     findFunds: procedure
     .input(
         z.object({
@@ -34,6 +35,57 @@ const fundsRouter = router({
         if (funds) {
             return funds
         }
+    }),
+    /* Finding funds by their unique ISIN code */
+    findByIsin: procedure
+    .input(
+        z.object({
+            isin_code: z.string()
+        })
+        .required()
+    )
+    .query(async ({input}) => {
+        const result = prisma.funds.findUnique({
+            where: {
+                isin_code: input.isin_code,
+            },
+            include: {
+                rates: {
+                    select: {
+                        subscription_fee: true,
+                        mgt_fee: true,
+                        redemption_fee: true
+                    }
+                },
+                managers: {
+                    select: {
+                        manager_name: true
+                    }
+                },
+                categories: {
+                    select: {
+                        name: true
+                    }
+                },
+                legal_types: {
+                    select: {
+                        name: true
+                    }
+                },
+                performances: {
+                    select: {
+                        vl_value: true,
+                        an_value: true,
+                        date: true
+                    },
+                    orderBy: {
+                        date: 'asc',
+                    },
+                }
+            }
+        })
+
+        return result
     })
 })
 

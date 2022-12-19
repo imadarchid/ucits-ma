@@ -12,7 +12,7 @@ export const Layout: React.FC<Props> = (props) => {
               <div className="mx-auto max-w-3xl pt-20 sm:pt-48">
                 <div>
                   <div>
-                    <h1 className="text-4xl font-bold tracking-tight sm:text-center sm:text-6xl">
+                    <h1 className="lg:text-6xl lg:text-center md:text-center md:text-2xl font-bold tracking-tight">
                       OPCVM Track 📈
                     </h1>
                     <p className="mt-6 text-lg leading-8 text-gray-600 sm:text-center">

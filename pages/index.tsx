@@ -1,11 +1,15 @@
-import Resultbox from '../components/Resultbox';
-import Searchbox from '../components/Searchbox';
+import { useState } from 'react';
+import { Resultbox } from '../components/Resultbox';
+import { Searchbox} from '../components/Searchbox';
 
 export default function IndexPage() {
+
+  const [selectedFund, setSelectedFund] = useState('')
+
   return (
     <div>
-      <Searchbox />
-      <Resultbox />
+      <Searchbox setFund={setSelectedFund}/>
+      {(selectedFund.length > 0) ? <Resultbox isin_code={selectedFund}/> : ''}
     </div>
   );
 }

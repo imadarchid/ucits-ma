@@ -10,7 +10,17 @@ import {
   } from 'chart.js';
 
 import { Line } from 'react-chartjs-2';
-import {faker} from '@faker-js/faker';
+import { useEffect, useState } from 'react';
+
+interface PerformanceType {
+  vl_value: number,
+  an_value: number,
+  date: Date
+}
+
+interface PerformanceChartProps {
+  dataset: PerformanceType[] | any
+}
 
 ChartJS.register(
     CategoryScale,
@@ -23,40 +33,64 @@ ChartJS.register(
 );
 
 export const options = {
-    responsive: true,
+    // maintainAspectRatio : false,
+    // responsive: true,
     plugins: {
       legend: {
         position: 'top' as const,
       },
-      title: {
+    },
+    scales: {
+      y: {
+        type: 'linear' as const,
         display: true,
-        text: 'Chart.js Line Chart',
+        position: 'left' as const,
+      },
+      y1: {
+        type: 'linear' as const,
+        display: true,
+        position: 'right' as const,
+        grid: {
+          drawOnChartArea: false,
+        },
       },
     },
 };
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 
-export const data = {
-    labels,
-    datasets: [
-      {
-        label: 'Dataset 1',
-        data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-        borderColor: 'rgb(255, 99, 132)',
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-      },
-      {
-        label: 'Dataset 2',
-        data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-        borderColor: 'rgb(53, 162, 235)',
-        backgroundColor: 'rgba(53, 162, 235, 0.5)',
-      },
-    ],
-};
+export const PerformanceChart = ({dataset}: PerformanceChartProps) => {
 
-export function PerformanceChart() {
+    const [data, setData] = useState({labels: [] as any, datasets: [] as any});
+
+    useEffect(() => { 
+      if (dataset) {
+
+        setData({
+          labels: dataset.map((x: any) => new Date(x.date).toLocaleDateString("en-US")),
+          datasets: [
+            {
+              label: 'VL Value',
+              data: dataset.map((x: any) => x.vl_value),
+              borderColor: 'rgb(255, 99, 132)',
+              backgroundColor: 'rgba(255, 99, 132, 0.5)',
+              yAxisID: 'y',
+            },
+            {
+              label: 'AN Value',
+              data: dataset.map((x: any) => x.an_value),
+              borderColor: 'rgb(53, 162, 235)',
+              backgroundColor: 'rgba(53, 162, 235, 0.5)',
+              yAxisID: 'y1',
+            },
+          ],
+        })
+
+      }
+    }, [dataset])
+
     return (
+      <div className='flex max-w-2xl justify-center'>
         <Line options={options} data={data} ></Line>
+      </div>
     )
 }

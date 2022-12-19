@@ -28,9 +28,13 @@ export const Resultbox = ({isin_code}: BoxProps) => {
                         <div className="w-40"><b>{fund.data?.name}</b></div>
                         <div className="grow bg-cover bg-center self-end rounded-md py-8 px-8" style={{ backgroundImage: "url('https://i.le360.ma/fr/sites/default/files/styles/image_la_une_on_home_page/public/assets/images/2020/01/logo.jpg')"}}> 
                         </div>
+                        <div className="space-y-3 space-x-1 py-4">
+                            <span className="bg-yellow-600 px-2.5 py-0.5 text-xs text-white rounded-lg font-semibold">{fund.data?.categories?.name}</span>
+                            <span className="bg-green-400 px-2.5 py-0.5 text-xs text-white rounded-lg font-semibold">{fund.data?.legal_types?.name}</span>
+                            <span className="bg-blue-600 px-2.5 py-0.5 text-xs text-white rounded-lg font-semibold">{fund.data?.periodicity}</span>
+                        </div>
                         <div>
-                            <br></br>
-                            <p className="text-sm">{fund.data?.name} is a OPCVM fund type {fund.data?.legal_types?.name} managed by {fund.data?.managers.manager_name}</p>
+                            <p className="text-sm">{fund.data?.name} is an OPCVM fund type {fund.data?.legal_types?.name} managed by <b>{fund.data?.managers.manager_name}</b></p>
                         </div>
                         <div className="flex items-center flex-wrap md:flex-row flex-column py-4 md:space-x-2">
                             <Statbox value={fund.data?.rates?.subscription_fee} description={'Subscription Fee'}/>

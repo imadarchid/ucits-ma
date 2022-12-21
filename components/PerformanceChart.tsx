@@ -13,13 +13,13 @@ import { Line } from 'react-chartjs-2';
 import { useEffect, useState } from 'react';
 
 interface PerformanceType {
-  vl_value: number,
-  an_value: number,
-  date: Date
+  vl_value: string | null,
+  an_value: string | null,
+  date: string
 }
 
 interface PerformanceChartProps {
-  dataset: PerformanceType[] | any
+  dataset?: PerformanceType[]
 }
 
 ChartJS.register(
@@ -33,8 +33,6 @@ ChartJS.register(
 );
 
 export const options = {
-    // maintainAspectRatio : false,
-    // responsive: true,
     plugins: {
       legend: {
         position: 'top' as const,

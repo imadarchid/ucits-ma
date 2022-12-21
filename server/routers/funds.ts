@@ -2,7 +2,6 @@
 import { z } from 'zod';
 import { Prisma } from '@prisma/client'
 
-
 import { procedure, router } from '../trpc';
 import { prisma } from '../db'
 
@@ -59,7 +58,8 @@ const fundsRouter = router({
                 },
                 managers: {
                     select: {
-                        manager_name: true
+                        manager_name: true,
+                        logo_url: true
                     }
                 },
                 categories: {

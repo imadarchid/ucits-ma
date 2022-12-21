@@ -1,6 +1,6 @@
 import { trpc } from "../utils/trpc";
 import { PerformanceChart } from "./PerformanceChart";
-import Statbox from "./Statbox";
+import Stat from "./Stat";
 
 interface BoxProps {
     isin_code: string
@@ -26,8 +26,7 @@ export const Resultbox = ({isin_code}: BoxProps) => {
                     </div>
                     <div id="cardContent" className="flex flex-row flex-wrap items-center px-4 py-2">
                         <div className="w-40"><b>{fund.data?.name}</b></div>
-                        <div className="grow bg-cover bg-center self-end rounded-md py-8 px-8" style={{ backgroundImage: "url('https://i.le360.ma/fr/sites/default/files/styles/image_la_une_on_home_page/public/assets/images/2020/01/logo.jpg')"}}> 
-                        </div>
+                        <div className="grow bg-cover bg-center self-end rounded-md py-8 px-8" style={{ backgroundImage: `url(${fund.data?.managers.logo_url})`}} />
                         <div className="space-y-3 space-x-1 py-4">
                             <span className="bg-yellow-600 px-2.5 py-0.5 text-xs text-white rounded-lg font-semibold">{fund.data?.categories?.name}</span>
                             <span className="bg-green-400 px-2.5 py-0.5 text-xs text-white rounded-lg font-semibold">{fund.data?.legal_types?.name}</span>
@@ -37,9 +36,9 @@ export const Resultbox = ({isin_code}: BoxProps) => {
                             <p className="text-sm">{fund.data?.name} is an OPCVM fund type {fund.data?.legal_types?.name} managed by <b>{fund.data?.managers.manager_name}</b></p>
                         </div>
                         <div className="flex items-center flex-wrap md:flex-row flex-column py-4 md:space-x-2">
-                            <Statbox value={fund.data?.rates?.subscription_fee} description={'Subscription Fee'}/>
-                            <Statbox value={fund.data?.rates?.mgt_fee} description={'Management Fee'}/>
-                            <Statbox value={fund.data?.rates?.redemption_fee} description={'Redemption Fee'}/>
+                            <Stat value={fund.data?.rates?.subscription_fee} description={'Subscription Fee'}/>
+                            <Stat value={fund.data?.rates?.mgt_fee} description={'Management Fee'}/>
+                            <Stat value={fund.data?.rates?.redemption_fee} description={'Redemption Fee'}/>
                         </div>
                     </div>
                 </div>

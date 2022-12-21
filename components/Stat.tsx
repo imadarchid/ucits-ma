@@ -3,7 +3,7 @@ interface StatProps {
     description: string
 }
 
-export default function Statbox({value, description}: StatProps) {
+export default function Stat({value, description}: StatProps) {
     return (
         <div>
             <p className="md:text-3xl text-xl font-semibold">{Number(value) * 100} %</p>

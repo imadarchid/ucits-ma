@@ -6,7 +6,6 @@ export const Layout: React.FC<Props> = (props) => {
   return (
     <>
       <div className="isolate bg-white">
-        {/* <div className="flex min-h-screen"> */}
           <main>
             <div className="px-6 lg:px-8">
               <div className="mx-auto max-w-3xl pt-20 sm:pt-48">
@@ -42,7 +41,7 @@ export const Layout: React.FC<Props> = (props) => {
                           gradientUnits="userSpaceOnUse"
                         >
                           <stop stopColor="#9089FC"></stop>
-                          <stop offset="1" stopColor="#FF80B5"></stop>
+                          <stop offset="1" stopColor="#60FBCC"></stop>
                         </linearGradient>
                       </defs>
                     </svg>
@@ -55,7 +54,6 @@ export const Layout: React.FC<Props> = (props) => {
             </div>
           </main>
         </div>
-      {/* </div> */}
     </>
   );
 };

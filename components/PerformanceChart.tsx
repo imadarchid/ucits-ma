@@ -7,14 +7,16 @@ import {
     Title,
     Tooltip,
     Legend,
+    ChartData,
+    ChartOptions,
   } from 'chart.js';
 
 import { Line } from 'react-chartjs-2';
 import { useEffect, useState } from 'react';
 
 interface PerformanceType {
-  vl_value: string | null,
-  an_value: string | null,
+  vl_value: number | null,
+  an_value: number | null,
   date: string
 }
 
@@ -32,22 +34,22 @@ ChartJS.register(
     Legend
 );
 
-export const options = {
+export const options:ChartOptions<'line'> = {
     plugins: {
       legend: {
-        position: 'top' as const,
+        position: 'top',
       },
     },
     scales: {
       y: {
-        type: 'linear' as const,
+        type: 'linear',
         display: true,
-        position: 'left' as const,
+        position: 'left',
       },
       y1: {
-        type: 'linear' as const,
+        type: 'linear',
         display: true,
-        position: 'right' as const,
+        position: 'right',
         grid: {
           drawOnChartArea: false,
         },
@@ -58,24 +60,24 @@ export const options = {
 
 export const PerformanceChart = ({dataset}: PerformanceChartProps) => {
 
-    const [data, setData] = useState({labels: [] as any, datasets: [] as any});
+    const [data, setData] = useState({labels: [], datasets: []} as ChartData<'line'>);
 
     useEffect(() => { 
       if (dataset) {
 
         setData({
-          labels: dataset.map((x: any) => new Date(x.date).toLocaleDateString("en-US")),
+          labels: dataset.map((label) => new Date(label.date).toLocaleDateString("en-US")),
           datasets: [
             {
               label: 'VL Value',
-              data: dataset.map((x: any) => x.vl_value),
+              data: dataset.map((perf) => perf.vl_value),
               borderColor: 'rgb(255, 99, 132)',
               backgroundColor: 'rgba(255, 99, 132, 0.5)',
               yAxisID: 'y',
             },
             {
               label: 'AN Value',
-              data: dataset.map((x: any) => x.an_value),
+              data: dataset.map((perf) => perf.an_value),
               borderColor: 'rgb(53, 162, 235)',
               backgroundColor: 'rgba(53, 162, 235, 0.5)',
               yAxisID: 'y1',

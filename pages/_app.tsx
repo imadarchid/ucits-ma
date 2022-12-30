@@ -1,16 +1,14 @@
 import '../styles/globals.css'
 
-import { trpc } from '../utils/trpc';
-import { Layout } from '../components/Layout';
-
 import type { AppType } from 'next/app'
+import { trpc } from '../utils/trpc'
+import Layout from '../components/Layout'
 
-const MyApp: AppType = ({ Component, pageProps }) => {
-  return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
-  )
-};
+// eslint-disable-next-line react/function-component-definition, react/prop-types
+const MyApp: AppType = ({ Component, pageProps }) => (
+  <Layout>
+    <Component {...pageProps} />
+  </Layout>
+)
 
-export default trpc.withTRPC(MyApp);
+export default trpc.withTRPC(MyApp)

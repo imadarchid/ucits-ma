@@ -1,13 +1,7 @@
 import { z } from 'zod'
-import { Prisma } from '@prisma/client'
 
 import { procedure, router } from '../trpc'
 import { prisma } from '../db'
-
-const defaultFundSelect = Prisma.validator<Prisma.fundsSelect>()({
-  isin_code: true,
-  name: true,
-})
 
 const fundsRouter = router({
   /* Finding funds matching keystrokes by user */
@@ -27,7 +21,10 @@ const fundsRouter = router({
             mode: 'insensitive',
           },
         },
-        select: defaultFundSelect,
+        select: {
+          isin_code: true,
+          name: true,
+        },
         take: 5,
       })
 

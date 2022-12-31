@@ -1,6 +1,11 @@
 import { useState } from 'react'
 import { trpc } from '../utils/trpc'
 
+interface Fund {
+  name: string
+  isin_code: string
+}
+
 interface SearchBoxProps {
   setFund: (isinCode: string) => void
 }
@@ -47,7 +52,7 @@ export default function Searchbox({ setFund }: SearchBoxProps) {
           {searchText.length ? (
             <div className="absolute min-w-full bg-white flex flex-col divide-x border-solid border-2 rounded-lg">
               {funds.data &&
-                funds.data?.map((x) => (
+                funds.data?.map((x: Fund) => (
                   <button
                     type="button"
                     key={x.isin_code}

@@ -2,24 +2,36 @@ service: ucits-bot
 
 frameworkVersion: '3'
 
+useDotenv: true
+
 provider:
   name: aws
   runtime: python3.8
+  region: eu-west-3
+
+  vpc:
+    securityGroupIds:
+      - ${env:SECURITY_GROUP_ID}
+    subnetIds:
+      - ${env:SUBNET_1}
+      - ${env:SUBNET_2}
+      - ${env:SUBNET_3}
 
 functions:
   updateFunds:
     handler: handler.update_funds
-    events:
-      - http:
-          path: funds
-          method: get
   
   updatePerformance:
     handler: handler.update_performance
-    events:
-      - http:
-          path: perf
-          method: get
 
 plugins:
   - serverless-offline
+  - serverless-python-requirements
+ 
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
+
+package:
+  exclude:
+    - venv/**

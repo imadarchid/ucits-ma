@@ -1,16 +1,38 @@
+import os
 import json
+import boto3
 import psycopg2
 
+from dotenv import load_dotenv
 from datetime import datetime
 
 from utils import scrap, extract
 
+load_dotenv()
+
 # Local testing
 # conn = psycopg2.connect(database="ucits", user='postgres', password='postgres', host='localhost', port='5200')
 
+def get_credentials():
+    session = boto3.session.Session()
+    client = session.client(
+        service_name='secretsmanager',
+        region_name=os.getenv['REGION']
+    )
+
+    try:
+        get_secret_value_response = client.get_secret_value(
+            SecretId=os.getenv['SECRET_NAME']
+        )
+    except Exception as e:
+        raise e
+    
+    secret = json.loads(get_secret_value_response['SecretString'])
+    return secret
+
 # Load AWS Credentials to be passed to conn
-credential = []
-conn = psycopg2.connect(user=credential['username'], password=credential['password'], host=credential['host'], database=credential['db'])
+credentials = get_credentials()
+conn = psycopg2.connect(user=os.getenv['DB_USER'], password=credentials['password'], host=os.getenv['DB_HOST'], database=os.getenv['DB_MAIN'])
 
 conn.autocommit = True
 cursor = conn.cursor()
@@ -57,7 +79,7 @@ def update_funds(event, context):
 
         conn.commit()
 
-    return {"statusCode": 200}
+    return {"statusCode": 200, "body": "done"}
 
 """ 
     Update Performance

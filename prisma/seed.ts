@@ -29,21 +29,12 @@ interface Fund {
   'Frais de gestion': number | '-'
 }
 
-const legalHandler = (value: string) => {
-  return value === 'FCP' ? 2 : 1
-}
+const legalHandler = (value: string) => (value === 'FCP' ? 2 : 1)
 
-const catHandler = (value: string) => {
-  return (
-    categories.findIndex((x) => {
-      return x.name === value
-    }) + 1
-  )
-}
+const catHandler = (value: string) =>
+  categories.findIndex((x) => x.name === value) + 1
 
-const periodicityHandler = (value: string) => {
-  return value === 'weekly' ? 2 : 1
-}
+const periodicityHandler = (value: string) => (value === 'weekly' ? 2 : 1)
 
 const load = async (file: string) => {
   const xlsxData = await fs.readFile(path.resolve(__dirname, file))

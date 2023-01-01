@@ -1,0 +1,25 @@
+service: ucits-bot
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.8
+
+functions:
+  updateFunds:
+    handler: handler.update_funds
+    events:
+      - http:
+          path: funds
+          method: get
+  
+  updatePerformance:
+    handler: handler.update_performance
+    events:
+      - http:
+          path: perf
+          method: get
+
+plugins:
+  - serverless-offline

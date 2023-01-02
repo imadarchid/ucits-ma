@@ -15,8 +15,8 @@ import { Line } from 'react-chartjs-2'
 import { useEffect, useState } from 'react'
 
 interface PerformanceType {
-  vl_value: number | null
-  an_value: number | null
+  vl_value: number
+  an_value: number
   date: string
 }
 

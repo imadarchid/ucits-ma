@@ -39,8 +39,8 @@ model performances {
   performance_id Int      @id @default(autoincrement())
   isin_code      String   @db.VarChar
   date           DateTime @db.Date
-  an_value       Decimal? @db.Decimal
-  vl_value       Decimal? @db.Decimal
+  an_value       Decimal @db.Decimal
+  vl_value       Decimal @db.Decimal
   funds          funds    @relation(fields: [isin_code], references: [isin_code], onDelete: NoAction, onUpdate: NoAction, map: "ISIN constraint")
 }
 

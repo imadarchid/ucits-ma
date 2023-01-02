@@ -17,22 +17,33 @@ def get_credentials():
     session = boto3.session.Session()
     client = session.client(
         service_name='secretsmanager',
-        region_name=os.getenv['REGION']
+        region_name=os.getenv('REGION')
     )
+
+    print('Connecting 1...')
 
     try:
         get_secret_value_response = client.get_secret_value(
-            SecretId=os.getenv['SECRET_NAME']
+            SecretId=os.getenv('SECRET_NAME')
         )
+        print(get_secret_value_response)
     except Exception as e:
         raise e
     
     secret = json.loads(get_secret_value_response['SecretString'])
+    print(secret)
     return secret
 
 # Load AWS Credentials to be passed to conn
 credentials = get_credentials()
-conn = psycopg2.connect(user=os.getenv['DB_USER'], password=credentials['password'], host=os.getenv['DB_HOST'], database=os.getenv['DB_MAIN'])
+print('Connecting 2...')
+print(os.getenv('DB_USER'))
+print(os.getenv('DB_HOST'))
+print(os.getenv('DB_MAIN'))
+print(credentials['password'])
+
+conn = psycopg2.connect(user=os.getenv('DB_USER'), password=credentials['password'], host=os.getenv('DB_HOST'), database=os.getenv('DB_MAIN'))
+print('Connected.')
 
 conn.autocommit = True
 cursor = conn.cursor()
@@ -47,6 +58,7 @@ def update_funds(event, context):
     last_record = scrap()
     data = extract(last_record[0])
     
+    print('Starting update...')
     for i, row in data.iterrows():
         # Add manager if doesn't exist
         cursor.execute('INSERT INTO managers (manager_name) VALUES (%s) ON CONFLICT DO NOTHING', (row['managed_by'],))

@@ -12,4 +12,4 @@ ENV DATABASE_URL=postgresql://postgres:postgres@postgres:5432/ucits?schema=publi
 RUN npx prisma generate
 
 EXPOSE 3000
-ENTRYPOINT ["/bin/sh", "-c" , "npx prisma db seed && npm run dev"]
+CMD ["npm", "run", "dev"]

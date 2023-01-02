@@ -8,6 +8,12 @@ provider:
   name: aws
   runtime: python3.8
   region: eu-west-3
+  environment:
+    REGION: ${env:REGION}
+    SECRET_NAME: ${env:SECRET_NAME}
+    DB_HOST: ${env:DB_HOST}
+    DB_USER: ${env:DB_USER}
+    DB_MAIN: ${env:DB_MAIN}
 
   vpc:
     securityGroupIds:

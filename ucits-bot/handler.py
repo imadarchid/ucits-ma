@@ -36,10 +36,6 @@ def get_credentials():
 
 # Load AWS Credentials to be passed to conn
 credentials = get_credentials()
-print('Connecting 2...')
-print(os.getenv('DB_USER'))
-print(os.getenv('DB_HOST'))
-print(os.getenv('DB_MAIN'))
 print(credentials['password'])
 
 conn = psycopg2.connect(user=os.getenv('DB_USER'), password=credentials['password'], host=os.getenv('DB_HOST'), database=os.getenv('DB_MAIN'))
@@ -47,6 +43,13 @@ print('Connected.')
 
 conn.autocommit = True
 cursor = conn.cursor()
+
+"""
+    Intitialize DB by uploading the schema and running a seed function
+"""
+
+def init_db(event, context):
+    pass
 
 """ 
     Updating/Upserting UCITS funds with its data

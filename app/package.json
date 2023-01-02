@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:docker": "cd .. && docker-compose up",
+    "dev:db": "cd .. && docker-compose up postgres",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

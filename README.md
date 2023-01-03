@@ -46,7 +46,20 @@ npm run dev
 ```
 
 ## Project Architecture
-WIP
+![archi](https://user-images.githubusercontent.com/8378660/210359350-8d40bd1f-1e96-41bc-b2c6-42f20ac28dda.png)
+
+### Data Layer
+The data layer refers to the resources dedicated to retrieve and populate data on the database instance. 
+
+- **initDb**: A lambda function to initiate the DB instance (Creation + Seed)
+- **updateFunds**: A lambda function to retrieve funds from the ASFIM website and populating them on the database. This is run daily thanks to a Cloudwatch cron event.
+- **updatePerformance**: A lambda function to retrieve performance records from the ASFIM website and populating them on the database according to the available funds. This is run daily thanks to a Cloudwatch cron event.
+
+All interactions are done securely by retrieving DB secrets from AWS Secrets Manager.
+
+### App Layer
+An EC2 instance (with PM2 & NGINX) to run the app.
+_Why not AWS Amplify ?_: The app has to be in the same VPC as the RDS instance + Accessing AWS Secrets Manager is a hassle on Amplify. 
 
 ## Roadmap
 WIP

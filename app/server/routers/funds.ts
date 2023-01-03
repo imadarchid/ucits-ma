@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 import { procedure, router } from '../trpc'
-import { prisma } from '../db'
+import prisma from '../db'
 
 const fundsRouter = router({
   /* Finding funds matching keystrokes by user */

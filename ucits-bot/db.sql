@@ -64,8 +64,8 @@ CREATE TABLE IF NOT EXISTS public.performances
     performance_id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
     isin_code character varying NOT NULL,
     date date NOT NULL,
-    an_value numeric,
-    vl_value numeric,
+    an_value numeric NOT NULL,
+    vl_value numeric NOT NULL,
     PRIMARY KEY (performance_id)
 );
 

@@ -26,30 +26,43 @@ def get_credentials():
         get_secret_value_response = client.get_secret_value(
             SecretId=os.getenv('SECRET_NAME')
         )
-        print(get_secret_value_response)
     except Exception as e:
         raise e
     
     secret = json.loads(get_secret_value_response['SecretString'])
-    print(secret)
     return secret
 
-# Load AWS Credentials to be passed to conn
-credentials = get_credentials()
-print(credentials['password'])
+def connect_db():
+    # Load AWS Credentials to be passed to conn
+    credentials = get_credentials()
 
-conn = psycopg2.connect(user=os.getenv('DB_USER'), password=credentials['password'], host=os.getenv('DB_HOST'), database=os.getenv('DB_MAIN'))
-print('Connected.')
+    conn = psycopg2.connect(user=os.getenv('DB_USER'), password=credentials['password'], host=os.getenv('DB_HOST'), database=os.getenv('DB_MAIN'))
+    print('Connected.')
 
-conn.autocommit = True
-cursor = conn.cursor()
+    conn.autocommit = True
+    cursor = conn.cursor()
+    return cursor, conn
 
 """
     Intitialize DB by uploading the schema and running a seed function
 """
 
 def init_db(event, context):
-    pass
+    credentials = get_credentials()
+    conn = psycopg2.connect(user=os.getenv('DB_USER'), password=credentials['password'], host=os.getenv('DB_HOST'))
+    conn.autocommit = True
+    cursor = conn.cursor()
+
+    cursor.execute(f"DROP DATABASE IF EXISTS {os.getenv('DB_MAIN')}")
+    cursor.execute(f"CREATE DATABASE {os.getenv('DB_MAIN')}")
+    conn = psycopg2.connect(user=os.getenv('DB_USER'), password=credentials['password'], host=os.getenv('DB_HOST'), database=os.getenv('DB_MAIN'))
+    conn.autocommit = True
+    cursor = conn.cursor()
+    
+    with open('db.sql', 'r') as f:
+        cursor.execute(f.read())
+
+    return True
 
 """ 
     Updating/Upserting UCITS funds with its data
@@ -57,6 +70,8 @@ def init_db(event, context):
     Data will come from the latest scrapped file
 """
 def update_funds(event, context):
+
+    cursor, conn = connect_db()
     
     last_record = scrap()
     data = extract(last_record[0])
@@ -101,6 +116,8 @@ def update_funds(event, context):
     update_perf() will run daily to get the latest performance from ASFIM for all available funds.
 """
 def update_performance(event, context):
+
+    cursor = connect_db()
 
     last_record = scrap()
     cursor.execute('SELECT date FROM performances ORDER BY date DESC LIMIT 1')

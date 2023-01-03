@@ -5,7 +5,6 @@ import path from 'path'
 
 const prisma = new PrismaClient()
 
-const legal_types = [{ name: 'SICAV' }, { name: 'FCP' }]
 const categories = [
   { name: 'Actions' },
   { name: 'OMLT' },
@@ -14,8 +13,6 @@ const categories = [
   { name: 'OCT' },
   { name: 'Contractuel' },
 ]
-const periodicities = [{ name: 'daily' }, { name: 'weekly' }]
-
 interface Fund {
   'Dénomination OPCVM': string
   'CODE ISIN': string
@@ -48,27 +45,12 @@ const load = async (file: string) => {
   return output
 }
 
-const addLookupValues = async () => {
-  // legal types [SICAV, FCP]
-  const legalVals = await prisma.legal_types.createMany({
-    data: legal_types,
-  })
-  // categories [Actions, OMLT, Monétaire, Diversifié, OCT, Contractuel]
-  const categoryVals = await prisma.categories.createMany({
-    data: categories,
-  })
-  // periodicities [Daily, Weekly]
-  const periodicityVals = await prisma.periodicities.createMany({
-    data: periodicities,
-  })
-
-  return [legalVals, categoryVals, periodicityVals]
-}
-
 const addFunds = async () => {
   const funds = await load('./seedFile.xlsx')
 
-  for (let i = 0; i < funds.length; i++) {
+  for (let i = 0; i < funds.length; i += 1) {
+    /* eslint-disable no-await-in-loop */
+    /* Ignoring no-await-in-loop because order matters */
     const manager = await prisma.managers.upsert({
       where: {
         manager_name: funds[i]['Société de Gestion'],
@@ -114,7 +96,6 @@ const addFunds = async () => {
 }
 
 const seedDB = async () => {
-  await addLookupValues()
   await addFunds()
 }
 
@@ -122,8 +103,8 @@ seedDB()
   .then(async () => {
     await prisma.$disconnect
   })
-  .catch(async (e) => {
-    console.error(e)
+  .catch(async () => {
+    // console.error(e)
     await prisma.$disconnect()
     process.exit(1)
   })

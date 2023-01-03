@@ -4,6 +4,7 @@
 
 ➡️ **What's a UCITS?** Check AMMC's (Morocco's Securities and Exchange Commission) [document](https://www.ammc.ma/sites/default/files/AMMC_Educational%20Guide%20related%20to%20UCITS-OPCVM.pdf) to learn more.
 
+
 ## Project Structure
 - `app`: Next.js + TRPC + Prisma project
 - `db`: SQL file for tables creation
@@ -11,7 +12,9 @@
 
 ## Run locally
 If you'd like to run `ucits-ma` locally, you have two options:
+
 - **Docker**
+
 If you have docker installed, simply run:
 ```sh
 npm run dev:docker

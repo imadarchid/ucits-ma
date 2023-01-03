@@ -29,6 +29,9 @@ functions:
   
   updatePerformance:
     handler: handler.update_performance
+  
+  initDb:
+    handler: handler.init_db
 
 plugins:
   - serverless-offline

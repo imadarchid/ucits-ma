@@ -128,7 +128,6 @@ ALTER TABLE IF EXISTS public.performances
     ON DELETE NO ACTION
     NOT VALID;
 
-
 INSERT INTO public.periodicities (name)
 VALUES ('daily'), ('weekly');
 

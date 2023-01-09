@@ -3,14 +3,19 @@ import requests
 import pandas as pd
 
 from datetime import datetime
+from bs4 import BeautifulSoup
 
-def scrap(limit = 1):
+def scrap(limit = 1, frequency = 'weekly'):
+
+    n_r = requests.get('https://asfim.ma/tableaux-des-performances/')
+    soup = BeautifulSoup(n_r.text, 'html.parser')
+    nonce = soup.find_all(id='wdtNonceFrontendEdit_25')[0]['value']
 
     headers = {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     }
 
-    raw = f'draw=1&columns%5B0%5D%5Bdata%5D=0&columns%5B0%5D%5Bname%5D=wdt_ID&columns%5B0%5D%5Bsearchable%5D=true&columns%5B0%5D%5Borderable%5D=true&columns%5B0%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B0%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B1%5D%5Bdata%5D=1&columns%5B1%5D%5Bname%5D=titre&columns%5B1%5D%5Bsearchable%5D=false&columns%5B1%5D%5Borderable%5D=true&columns%5B1%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B1%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B2%5D%5Bdata%5D=2&columns%5B2%5D%5Bname%5D=date&columns%5B2%5D%5Bsearchable%5D=true&columns%5B2%5D%5Borderable%5D=true&columns%5B2%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B2%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B3%5D%5Bdata%5D=3&columns%5B3%5D%5Bname%5D=document&columns%5B3%5D%5Bsearchable%5D=false&columns%5B3%5D%5Borderable%5D=true&columns%5B3%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B3%5D%5Bsearch%5D%5Bregex%5D=false&order%5B0%5D%5Bcolumn%5D=2&order%5B0%5D%5Bdir%5D=desc&start=0&length={limit}&search%5Bvalue%5D=&search%5Bregex%5D=false&wdtNonce=2c2693c76c'
+    raw = f'draw=1&columns%5B0%5D%5Bdata%5D=0&columns%5B0%5D%5Bname%5D=wdt_ID&columns%5B0%5D%5Bsearchable%5D=true&columns%5B0%5D%5Borderable%5D=true&columns%5B0%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B0%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B1%5D%5Bdata%5D=1&columns%5B1%5D%5Bname%5D=titre&columns%5B1%5D%5Bsearchable%5D=false&columns%5B1%5D%5Borderable%5D=true&columns%5B1%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B1%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B2%5D%5Bdata%5D=2&columns%5B2%5D%5Bname%5D=date&columns%5B2%5D%5Bsearchable%5D=true&columns%5B2%5D%5Borderable%5D=true&columns%5B2%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B2%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B3%5D%5Bdata%5D=3&columns%5B3%5D%5Bname%5D=document&columns%5B3%5D%5Bsearchable%5D=false&columns%5B3%5D%5Borderable%5D=true&columns%5B3%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B3%5D%5Bsearch%5D%5Bregex%5D=false&order%5B0%5D%5Bcolumn%5D=2&order%5B0%5D%5Bdir%5D=desc&start=0&length={limit}&search%5Bvalue%5D=&search%5Bregex%5D=false&wdtNonce={nonce}'
 
     r = requests.post(
         'https://asfim.ma/wp-admin/admin-ajax.php?action=get_wdtable&table_id=25',
@@ -20,6 +25,14 @@ def scrap(limit = 1):
 
     response = r.json()
     docs = response['data']
+
+    if frequency == 'weekly':
+        docs = list(filter(lambda x: re.search(r'\bHebdomadaires\b', x[1]), docs))
+    elif frequency == 'daily':
+        docs = list(filter(lambda x: re.search(r'\bQuotidiennes\b', x[1]), docs))
+    else:
+        pass
+    
     return docs
 
 def extract(doc_item):
@@ -36,6 +49,11 @@ def extract(doc_item):
     df['redemption_fee'] = df['redemption_fee'].replace('-', 0, regex=True) # make data consistent for rates
     df['mgt_fee'] = df['mgt_fee'].replace('-', 0, regex=True) # make data consistent for rates
 
+    df = df[df.an_value != 'NC'] # potential case of NC on performance values
+    df = df[df.vl_value != 'NC'] # potential case of NC on performance values
+
     df['date'] = datetime.strptime(doc_item[2], '%d/%m/%Y')
 
     return df
+
+scrap(10)

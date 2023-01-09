@@ -4,7 +4,7 @@ on:
   push:
     branches: [ master ]
     paths:
-      - "ucits-bot"
+      - "ucits-bot/**"
   workflow_dispatch:
 
 defaults:
@@ -26,7 +26,7 @@ jobs:
         run: npm ci
 
       - name: Deploy Lambdas
-        run: serverless/github-action@v3.1
+        uses: serverless/github-action@v3.1
         with:
           args: deploy
         env:

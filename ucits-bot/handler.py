@@ -73,7 +73,7 @@ def update_funds(event, context):
 
     cursor, conn = connect_db()
     
-    last_record = scrap(5)
+    last_record = scrap(5, 'all')
     data = extract(last_record[0])
     
     print('Starting update...')
@@ -120,7 +120,7 @@ def update_performance(event, context):
     cursor, conn = connect_db()
 
     cursor.execute('SELECT date FROM performances ORDER BY date DESC LIMIT 1')
-    last_record = scrap(5, 'weekly')
+    last_record = scrap(5, 'all')
     latest_date = cursor.fetchone()
 
     if latest_date is None or latest_date[0] != datetime.strptime(last_record[0][2], '%d/%m/%Y').date():

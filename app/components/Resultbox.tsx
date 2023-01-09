@@ -10,7 +10,7 @@ export default function Resultbox({ isinCode }: BoxProps) {
   const fund = trpc.funds.findByIsin.useQuery({ isinCode })
 
   return (
-    <div className="mx-auto max-w-5xl mt-8 flex flex-col sm:justify-center">
+    <div className="mx-auto max-w-5xl my-8 flex flex-col sm:justify-center">
       <div className="flex flex-row flex-wrap gap-x-2 gap-y-4 md:gap-y-0">
         <div className="max-w-full grow shadow-sm rounded-md border-2 border-solid divide-y">
           <div id="cardHeader" className="px-4 py-2">

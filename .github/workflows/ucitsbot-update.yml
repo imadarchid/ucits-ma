@@ -5,6 +5,7 @@ on:
     branches: [ master ]
     paths:
       - "ucits-bot"
+  workflow_dispatch:
 
 defaults:
   run:

@@ -49,6 +49,9 @@ def extract(doc_item):
     df['redemption_fee'] = df['redemption_fee'].replace('-', 0, regex=True) # make data consistent for rates
     df['mgt_fee'] = df['mgt_fee'].replace('-', 0, regex=True) # make data consistent for rates
 
+    df = df[df.an_value != 'NC'] # potential case of NC on performance values
+    df = df[df.vl_value != 'NC'] # potential case of NC on performance values
+
     df['date'] = datetime.strptime(doc_item[2], '%d/%m/%Y')
 
     return df

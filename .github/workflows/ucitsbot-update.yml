@@ -2,9 +2,10 @@ name: UCITSBot Update
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
     paths:
-      - "ucits-bot/**"
+      - ucits-bot/**
   workflow_dispatch:
 
 defaults:

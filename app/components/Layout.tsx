@@ -13,7 +13,7 @@ export default function Layout({ children }: Props) {
                 <h1 className="lg:text-6xl lg:text-center md:text-center md:text-2xl font-bold tracking-tight">
                   OPCVM Track 📈
                 </h1>
-                <p className="mt-6 text-lg leading-8 text-gray-600 sm:text-center">
+                <p className="mt-6 md:text-lg text-gray-600 md:text-center">
                   Track your favorite OPCVM funds in Morocco. Get the right data
                   and make the right comparisons to make your investment
                   decision.

@@ -52,8 +52,9 @@ def extract(doc_item):
     df = df[df.an_value != 'NC'] # potential case of NC on performance values
     df = df[df.vl_value != 'NC'] # potential case of NC on performance values
 
-    df['date'] = datetime.strptime(doc_item[2], '%d/%m/%Y')
+    date = re.search(r"(\d{2}-\d{1,2}-\d{4}).*", doc_item[1])
+    df['date'] = datetime.strptime(date.group(0), '%d-%m-%Y')
 
     return df
 
-scrap(10)
+# extract(scrap(5)[0])

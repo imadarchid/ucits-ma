@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import boto3
 import psycopg2
@@ -109,6 +110,7 @@ def update_funds(event, context):
 
         conn.commit()
 
+    print('Update completed...')
     return {"statusCode": 200, "body": "done"}
 
 """ 
@@ -123,7 +125,12 @@ def update_performance(event, context):
     last_record = scrap(5, 'all')
     latest_date = cursor.fetchone()
 
-    if latest_date is None or latest_date[0] != datetime.strptime(last_record[0][2], '%d/%m/%Y').date():
+    print('Starting update...')
+
+    date = re.search(r"(\d{2}-\d{1,2}-\d{4}).*", last_record[0][1]).group(0)
+    print(date)
+
+    if latest_date is None or latest_date[0] != datetime.strptime(date, '%d-%m-%Y').date():
         data = extract(last_record[0])
         for i, row in data.iterrows():
             cursor.execute('''
@@ -132,4 +139,6 @@ def update_performance(event, context):
             ''', (row['isin_code'], row['date'], row['an_value'], row['vl_value']))
     else:
         print('null')
+    
+    print('Update completed...')
     return {"statusCode": 200, "body": "done"}

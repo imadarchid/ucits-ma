@@ -28,13 +28,10 @@ jobs:
           python-version: "3.8"
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci & npm i serverless -g
 
       - name: Deploy Lambdas
-        uses: serverless/github-action@v3.1
-        with:
-          args: -c "cd ./ucits-bot && serverless deploy"
-          entrypoint: /bin/sh
+        run: serverless deploy
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

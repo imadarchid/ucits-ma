@@ -24,7 +24,7 @@
     "prettier/prettier": [
       "error",
       {
-        "endOfLine": "auto",
+        "endOfLine": "auto"
       }
     ],
     "react/require-default-props": [

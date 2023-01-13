@@ -48,8 +48,8 @@ export default function Resultbox({ isinCode }: BoxProps) {
               <span className="bg-green-400 px-2.5 py-0.5 text-xs text-white rounded-lg font-semibold">
                 {fund.data?.legal_types?.name}
               </span>
-              <span className="bg-blue-600 px-2.5 py-0.5 text-xs text-white rounded-lg font-semibold">
-                {fund.data?.periodicity}
+              <span className="bg-blue-600 px-2.5 py-0.5 capitalize text-xs text-white rounded-lg font-semibold">
+                {fund.data?.periodicities?.name}
               </span>
             </div>
             <div>

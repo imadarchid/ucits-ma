@@ -122,16 +122,16 @@ def update_performance(event, context):
     cursor, conn = connect_db()
 
     cursor.execute('SELECT date FROM performances ORDER BY date DESC LIMIT 1')
-    last_record = scrap(5, 'all')
+    records = scrap(5, 'all')
     latest_date = cursor.fetchone()
 
     print('Starting update...')
 
-    date = re.search(r"(\d{2}-\d{1,2}-\d{4}).*", last_record[0][1]).group(0)
+    date = re.search(r"(\d{2}-\d{1,2}-\d{4}).*", records[0][1]).group(0)
     print(date)
 
     if latest_date is None or latest_date[0] != datetime.strptime(date, '%d-%m-%Y').date():
-        data = extract(last_record[0])
+        data = extract(records[0])
         for i, row in data.iterrows():
             cursor.execute('''
                 INSERT INTO performances (isin_code, date, an_value, vl_value)
@@ -140,5 +140,28 @@ def update_performance(event, context):
     else:
         print('null')
     
+    print('Update completed...')
+    return {"statusCode": 200, "body": "done"}
+
+def populate_history(event, context):
+    cursor, conn = connect_db()
+
+    entries = scrap(30, 'any')
+    cursor.execute('SELECT date FROM performances ORDER BY date DESC LIMIT 1')
+    latest_date = cursor.fetchone()
+
+    for entry in entries:
+        date = re.search(r"(\d{2}-\d{1,2}-\d{4}).*", entry[1]).group(0)
+        if latest_date is None or latest_date[0] != datetime.strptime(date, '%d-%m-%Y').date():
+            print(f'Processing {date}')
+            data = extract(entry)
+            for i, row in data.iterrows():
+                cursor.execute('''
+                    INSERT INTO performances (isin_code, date, an_value, vl_value)
+                    VALUES (%s, %s, %s, %s)
+                ''', (row['isin_code'], row['date'], row['an_value'], row['vl_value']))
+        else:
+            print('null')
+            
     print('Update completed...')
     return {"statusCode": 200, "body": "done"}

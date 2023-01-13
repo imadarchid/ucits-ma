@@ -32,6 +32,9 @@ functions:
   
   initDb:
     handler: handler.init_db
+  
+  populateHistory:
+    handler: handler.populate_history
 
 plugins:
   - serverless-offline

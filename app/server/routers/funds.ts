@@ -68,6 +68,11 @@ const fundsRouter = router({
               name: true,
             },
           },
+          periodicities: {
+            select: {
+              name: true,
+            },
+          },
           performances: {
             select: {
               vl_value: true,
@@ -75,8 +80,9 @@ const fundsRouter = router({
               date: true,
             },
             orderBy: {
-              date: 'asc',
+              date: 'desc',
             },
+            take: 7,
           },
         },
       })

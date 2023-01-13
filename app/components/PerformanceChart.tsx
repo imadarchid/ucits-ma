@@ -65,8 +65,11 @@ export function PerformanceChart({ dataset }: PerformanceChartProps) {
 
   useEffect(() => {
     if (dataset) {
+      const labels = dataset.sort(
+        (b, a) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      )
       setData({
-        labels: dataset.map((label) =>
+        labels: labels.map((label) =>
           new Date(label.date).toLocaleDateString('en-US')
         ),
         datasets: [

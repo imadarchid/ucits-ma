@@ -1,4 +1,6 @@
 # 📈 ucits-ma
+![image](https://user-images.githubusercontent.com/8378660/215513010-d6a14b59-3091-4300-be82-692143574ee0.png)
+
 ## About
 `ucits-ma` is a small tool that allows potential investors (and curious souls like myself) to display information about Moroccan OPCVM funds (Basic information, 7-day performance, and fee structure).
 

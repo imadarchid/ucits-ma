@@ -29,7 +29,7 @@ const getSecrets = async () => {
     if (secret) {
       const parsedSecret = JSON.parse(secret)
       const password = encodeURIComponent(parsedSecret.password)
-      const dbConnectionString = `DATABASE_URL=postgresql://${process.env.DB_USER}:${password}@${process.env.DB_URL}:5432/${process.env.DB_NAME}?schema=public`
+      const dbConnectionString = `DATABASE_URL='postgresql://${process.env.DB_USER}:${password}@${process.env.DB_URL}:5432/${process.env.DB_NAME}?schema=public'`
       exec(`echo ${dbConnectionString} >> .env.production`, (error) => {
         if (error) {
           console.log(

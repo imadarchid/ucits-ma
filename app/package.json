@@ -12,12 +12,14 @@
     "lint:fix": "npm run lint -- --fix",
     "prettier": "npx prettier . --check",
     "prettier:fix": "npm run prettier -- --write",
-    "prepare": "cd .. && husky install"
+    "prepare": "cd .. && husky install",
+    "env-setup": "ts-node --compiler-options {\\\"module\\\":\\\"commonjs\\\"} pre-launch.ts"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.259.0",
     "@faker-js/faker": "^7.6.0",
     "@prisma/client": "^4.7.1",
     "@tanstack/react-query": "^4.19.1",
@@ -29,6 +31,7 @@
     "@types/react-dom": "18.0.9",
     "@typescript-eslint/eslint-plugin": "^5.47.1",
     "chart.js": "^4.0.1",
+    "dotenv": "^16.0.3",
     "eslint-config-next": "13.0.6",
     "eslint-config-prettier": "^8.5.0",
     "next": "13.0.6",
